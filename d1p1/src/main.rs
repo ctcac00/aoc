@@ -1,5 +1,6 @@
 use std::env;
 use std::fs::File;
+use std::io::prelude::*;
 use std::io::{self, BufRead};
 use std::path::Path;
 
@@ -11,6 +12,12 @@ where
 {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
+}
+
+fn write_output_file(result: &[u8]) -> std::io::Result<()> {
+    let mut f = File::create("output.txt")?;
+    f.write_all(result)?;
+    Ok(())
 }
 
 fn main() {
@@ -27,6 +34,9 @@ fn main() {
         for line in lines.map_while(Result::ok) {
             println!("{}", line);
         }
+        let result: i32 = 42;
+        println!("Result is {:?}", result);
+        write_output_file(&result.to_ne_bytes()).unwrap();
     } else {
         eprintln!("Error reading the file {}", file_path);
         std::process::exit(1);
