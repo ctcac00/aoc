@@ -36,10 +36,12 @@ fn main() {
         }
         let result: i32 = 42;
         println!("Result is {:?}", result);
-        write_output_file(&result.to_ne_bytes()).unwrap();
+        if let Err(e) = write_output_file(&result.to_ne_bytes()) {
+            eprintln!("Error writing the output file: {}", e);
+            std::process::exit(1);
+        }
     } else {
         eprintln!("Error reading the file {}", file_path);
         std::process::exit(1);
     }
 }
-
