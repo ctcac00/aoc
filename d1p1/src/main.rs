@@ -24,7 +24,7 @@ fn main() {
     let file_path = args[1].clone();
     if let Ok(lines) = read_lines(&file_path) {
         // Consumes the iterator, returns an (Optional) String
-        for line in lines.flatten() {
+        for line in lines.map_while(Result::ok) {
             println!("{}", line);
         }
     } else {
