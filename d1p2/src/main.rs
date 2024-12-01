@@ -21,11 +21,11 @@ fn write_output_file(result: &[u8]) -> std::io::Result<()> {
     Ok(())
 }
 
-fn solve(group_1: HashSet<i32>, group_2: HashMap<i32, i32>) -> i32 {
+fn solve(group_1: &HashSet<i32>, group_2: &HashMap<i32, i32>) -> i32 {
     let mut result = 0;
 
     for key in group_1 {
-        let value = group_2.get(&key).unwrap_or(&0);
+        let value = group_2.get(key).unwrap_or(&0);
         result += key * value;
         println!("key: {}, value: {}", key, value);
     }
@@ -57,7 +57,7 @@ fn main() {
                 .or_insert(1);
         }
 
-        let result = solve(group_1, group_2);
+        let result = solve(&group_1, &group_2);
         println!("Result is {:?}", result);
         if let Err(e) = write_output_file(result.to_string().as_bytes()) {
             eprintln!("Error writing the output file: {}", e);
