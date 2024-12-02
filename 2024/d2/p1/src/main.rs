@@ -20,37 +20,42 @@ fn write_output_file(result: &[u8]) -> std::io::Result<()> {
     Ok(())
 }
 
+fn check_safe(report: Vec<i32>) -> bool {
+    println!("{:?}", report);
+    let mut increasing = false;
+    let mut decreasing = false;
+    let mut is_safe = false;
+    let mut i = 0;
+    while i < report.len() - 1 {
+        if report[i + 1] > report[i] && (report[i + 1] - report[i]) <= 3 {
+            if decreasing {
+                is_safe = false;
+                break;
+            } else {
+                increasing = true;
+                is_safe = true;
+            }
+        } else if (report[i + 1] < report[i]) && ((report[i] - report[i + 1]) <= 3) {
+            if increasing {
+                is_safe = false;
+                break;
+            } else {
+                decreasing = true;
+                is_safe = true;
+            }
+        } else {
+            is_safe = false;
+            break;
+        }
+        i += 1;
+    }
+    is_safe
+}
+
 fn solve(reports: Vec<Vec<i32>>) -> i32 {
     let mut safe = 0;
     for report in reports {
-        println!("{:?}", report);
-        let mut increasing = false;
-        let mut decreasing = false;
-        let mut is_safe = false;
-        for i in 0..report.len() - 1 {
-            if report[i + 1] > report[i] && (report[i + 1] - report[i]) <= 3 {
-                if decreasing {
-                    is_safe = false;
-                    break;
-                } else {
-                    increasing = true;
-                    is_safe = true;
-                }
-            } else if (report[i + 1] < report[i]) && ((report[i] - report[i + 1]) <= 3) {
-                if increasing {
-                    is_safe = false;
-                    break;
-                } else {
-                    decreasing = true;
-                    is_safe = true;
-                }
-            } else {
-                is_safe = false;
-                break;
-            }
-        }
-        println!("is_safe: {}", is_safe);
-
+        let is_safe = check_safe(report);
         if is_safe {
             safe += 1;
         }
