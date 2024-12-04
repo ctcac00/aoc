@@ -87,10 +87,7 @@ fn word_search_p2(puzzle: &[Vec<char>], word: &str) {
 
 fn main() {
     let input = read_to_string("input.txt").unwrap();
-    let mut puzzle: Vec<Vec<char>> = Vec::new();
-    input.lines().for_each(|line| {
-        puzzle.push(line.chars().collect());
-    });
+    let puzzle: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     let mut word = &"XMAS";
     word_search_p1(&puzzle, word);
