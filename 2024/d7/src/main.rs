@@ -11,9 +11,9 @@ fn apply_operation(op: &str, a: u64, b: u64) -> u64 {
 fn calculate(values: &[u64], operations: &[&str]) -> u64 {
     let mut total = 0;
     for i in 0..operations.len() {
-        let mut left_value = values[i];
-        if i > 0 {
-            left_value = total;
+        let mut left_value = total;
+        if i == 0 {
+            left_value = values[i];
         }
 
         // println!(
