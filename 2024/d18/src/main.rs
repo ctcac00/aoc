@@ -46,15 +46,14 @@ fn bfs(
     target: Pos,
     parent: &mut HashMap<Pos, Pos>,
     dist: &mut HashMap<Pos, i32>,
-) {
+) -> bool {
     let mut q = vec![s];
     dist.insert(s, 0);
 
     while !q.is_empty() {
         let pos = q.remove(0);
         if pos == target {
-            println!("P1 -> {:?}", dist.get(&pos).unwrap());
-            break;
+            return true;
         }
         let neighbors = find_neighbors(map, &pos);
         for neighbor in neighbors {
@@ -65,6 +64,8 @@ fn bfs(
             }
         }
     }
+
+    false
 }
 
 fn solve_p1(map: &[Pos]) {
@@ -78,6 +79,28 @@ fn solve_p1(map: &[Pos]) {
     let mut dist = HashMap::new();
 
     bfs(map, s, target, &mut parent, &mut dist);
+    println!("P1 -> {:?}", dist.get(&target).unwrap());
+}
+
+fn solve_p2(map: &[Pos]) {
+    let s = Pos { x: 0, y: 0 };
+    let target = Pos {
+        x: GRID_SIZE.x - 1,
+        y: GRID_SIZE.y - 1,
+    };
+
+    let mut i = 0;
+
+    loop {
+        let mut parent = HashMap::new();
+        let mut dist = HashMap::new();
+        if !bfs(&map[..i], s, target, &mut parent, &mut dist) {
+            println!("P2 -> {:?}", map.get(i - 1).unwrap());
+            break;
+        }
+        i += 1;
+        print!("{},", i);
+    }
 }
 
 fn main() {
@@ -93,4 +116,5 @@ fn main() {
     println!("{:?}", bytes);
     print_grid(&bytes[..TEST_BYTES]);
     solve_p1(&bytes[..TEST_BYTES]);
+    solve_p2(&bytes);
 }
